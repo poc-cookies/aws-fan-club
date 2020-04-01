@@ -1,0 +1,32 @@
+title Issue a new Certificate
+
+participant Client
+participant SelfService
+participant CA
+participant S3
+
+activate Client
+Client->SelfService:1: issue_certificate(csr, sigalg)
+activate SelfService
+SelfService->CA:2: issue_certificate(csr, sigalg)
+activate CA
+SelfService<-CA:3: certificate_arn
+deactivate CA
+SelfService->S3:4: upload_meta(meta)
+activate S3
+SelfService<-S3:5: return
+deactivate S3
+SelfService->S3:6: upload_csr(csr)
+activate S3
+SelfService<-S3:7: return
+deactivate S3
+SelfService->CA:8: fetch_certificate(certificate_arn)
+activate CA
+SelfService<-CA:9: certificate
+deactivate CA
+SelfService->S3:10: upload_certificate(certificate)
+activate S3
+SelfService<-S3:11: return
+deactivate S3
+Client<-SelfService:12: certificate
+deactivate SelfService

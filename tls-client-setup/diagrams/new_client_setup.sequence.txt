@@ -1,0 +1,36 @@
+title Setup a New TLS Client
+
+participant Client
+participant SelfService
+participant S3
+participant SM
+
+activate Client
+Client->Client:1: generate_stores_password
+activate Client
+deactivateafter Client
+Client->Client:2: create_trust_store
+activate Client
+deactivateafter Client
+Client->Client:3: create_key_store
+activate Client
+deactivateafter Client
+Client->Client:4: generate_csr
+activate Client
+deactivateafter Client
+Client->SelfService:5: issue_certificate(csr, sigalg)
+activate SelfService
+Client<-SelfService:6: return
+deactivate SelfService
+Client->S3:7: upload_trust_store(trust_store)
+activate S3
+Client<-S3:8: return
+deactivate S3
+Client->S3:9: upload_key_store(key_store)
+activate S3
+Client<-S3:10: return
+deactivate S3
+Client->SM:11: store_password(stores_password)
+activate SM
+Client<-SM:12: return
+deactivate SM
